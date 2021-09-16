@@ -50,10 +50,7 @@ def post_detail(request, pk):
 
 
 @api_view(['GET'])
-def post_list_keyword_query(request):
-    keyword = request.GET.get("keyword", None)
-    if keyword is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+def post_list_keyword_query(request, keyword):
     if "맛집" not in keyword:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     posts = Post.objects.filter(keyword=keyword).values().order_by("-scraped_date")
@@ -76,12 +73,8 @@ def post_list_keyword_query(request):
 
 
 @api_view(['GET'])
-def post_list_keyword_score_query(request):
-    keyword = request.GET.get("keyword", None)
-    if keyword is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    food_score = request.GET.get("more-than", None)
-    if food_score is None:
+def post_list_keyword_score_query(request, keyword, food_score):
+    if "맛집" not in keyword:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     posts = Post.objects.filter(keyword=keyword, food_score__gte=float(food_score)).values().order_by("-scraped_date")
     serializer = PostSerializer(posts, many=True)
@@ -95,14 +88,7 @@ def keyword_list(request):
 
 
 @api_view(['GET'])
-def post_postid_keyword_query(request):
-    keyword = request.GET.get("keyword", None)
-    print(keyword)
-    if keyword is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    post_id = request.GET.get("post_id", None)
-    if post_id is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+def post_postid_keyword_query(request, keyword, post_id):
     try:
         post = Post.objects.get(post_id=post_id, keyword=keyword)
     except Post.DoesNotExist:
