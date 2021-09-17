@@ -10,6 +10,7 @@ class Post(models.Model):
     scraped_date = models.DateTimeField(auto_now_add=True)
     post_text = models.TextField(default="", blank=True)
     insta_analysis = models.TextField(default="", blank=True)
+    insta_analysis_food = models.BooleanField(default=False)
     is_ad = models.BooleanField(default=False)
 
     class Meta:

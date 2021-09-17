@@ -63,6 +63,7 @@ def post_list_keyword_query(request, keyword):
             "keyword": keyword,
             "post_text": "dummy",
             "insta_analysis": "dummy",
+            "insta_analysis_food": False,
             "is_ad": False
         }
         serializer = PostSerializer(data=data)
