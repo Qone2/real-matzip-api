@@ -59,7 +59,10 @@ def post_list_keyword_query(request, keyword):
             "post_id": "dummy",
             "post_url": "dummy",
             "img_url": "https://images.unsplash.com/photo-1604147706283-d7119b5b822c",
-            "keyword": keyword
+            "keyword": keyword,
+            "post_text": "dummy",
+            "insta_analysis": "dummy",
+            "is_ad": False
         }
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
