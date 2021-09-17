@@ -8,8 +8,8 @@ class Post(models.Model):
     keyword = models.CharField(max_length=50, blank=False)
     food_score = models.FloatField(default=0)
     scraped_date = models.DateTimeField(auto_now_add=True)
-    post_text = models.TextField(default="")
-    insta_analysis = models.TextField(default="")
+    post_text = models.TextField(default="", blank=True)
+    insta_analysis = models.TextField(default="", blank=True)
     is_ad = models.BooleanField(default=False)
 
     class Meta:
