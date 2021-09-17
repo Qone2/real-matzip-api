@@ -90,11 +90,20 @@ def keyword_list(request):
     return Response(keywords)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'DELETE'])
 def post_postid_keyword_query(request, keyword, post_id):
-    try:
-        post = Post.objects.get(post_id=post_id, keyword=keyword)
-    except Post.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    serializer = PostSerializer(post)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        try:
+            post = Post.objects.get(post_id=post_id, keyword=keyword)
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
+
+    elif request.method == 'DELETE':
+        try:
+            post = Post.objects.get(post_id=post_id, keyword=keyword)
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        post.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
