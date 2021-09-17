@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from posts.models import Post
 from posts.serializers import PostSerializer
+from django.db.models import Count
 
 
 @api_view(['GET', 'POST'])
@@ -110,3 +111,12 @@ def post_postid_keyword_query(request, keyword, post_id):
             return Response(status=status.HTTP_404_NOT_FOUND)
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+def not_crawled_yet(request):
+    response = {"keyword_list": []}
+    keyword_list = Post.objects.values("keyword").annotate(post_count=Count("post_id")).filter(post_count__lte=1)
+    for keyword in keyword_list:
+        response["keyword_list"].append(keyword["keyword"])
+    return Response(response)
