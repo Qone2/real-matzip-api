@@ -87,7 +87,10 @@ def post_list_keyword_score_query(request, keyword, food_score):
 @api_view(['GET'])
 def keyword_list(request):
     keywords = Post.objects.filter().values("keyword").distinct()
-    return Response(keywords)
+    response = {"keyword_list": []}
+    for keyword in keywords:
+        response["keyword_list"].append(keyword["keyword"])
+    return Response(response)
 
 
 @api_view(['GET', 'DELETE'])
