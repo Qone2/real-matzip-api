@@ -52,35 +52,13 @@ def post_detail(request, pk):
 
 @api_view(['GET'])
 def post_list_keyword_query(request, keyword):
-    if "맛집" not in keyword:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
     posts = Post.objects.filter(keyword=keyword).values().order_by("-scraped_date")
-    if posts.count() == 0:
-        data = {
-            "post_id": "dummy",
-            "post_url": "dummy",
-            "img_url": "https://images.unsplash.com/photo-1604147706283-d7119b5b822c",
-            "keyword": keyword,
-            "post_text": "dummy",
-            "insta_analysis": "dummy",
-            "insta_analysis_food": False,
-            "is_ad": False
-        }
-        serializer = PostSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def post_list_keyword_score_query(request, keyword, food_score):
-    if "맛집" not in keyword:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
     posts = Post.objects.filter(keyword=keyword, food_score__gte=float(food_score)).values().order_by("-scraped_date")
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
@@ -121,3 +99,25 @@ def not_crawled_yet(request):
     for keyword in keyword_list:
         response["keyword_list"].append(keyword["keyword"])
     return Response(response)
+
+
+@api_view(['POST'])
+def insert_keyword(request, keyword):
+    if "맛집" not in keyword:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    data = {
+        "post_id": "dummy",
+        "post_url": "dummy",
+        "img_url": "https://images.unsplash.com/photo-1604147706283-d7119b5b822c",
+        "keyword": keyword,
+        "post_text": "dummy",
+        "insta_analysis": "dummy",
+        "insta_analysis_food": False,
+        "is_ad": False
+    }
+    serializer = PostSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
