@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from posts.models import Post
 from posts.serializers import PostSerializer
-from django.db.models import Count
+from django.db.models import Count, Min, Max, Avg
 
 
 @api_view(['GET', 'POST'])
@@ -66,7 +66,7 @@ def post_list_keyword_score_query(request, keyword, food_score):
 
 @api_view(['GET'])
 def keyword_list(request):
-    keywords = Post.objects.filter().values("keyword").distinct()
+    keywords = Post.objects.values("keyword").annotate(first_date=Min("scraped_date")).order_by("first_date")
     response = {"keyword_list": []}
     for keyword in keywords:
         response["keyword_list"].append(keyword["keyword"])
@@ -95,7 +95,7 @@ def post_postid_keyword_query(request, keyword, post_id):
 @api_view(['GET'])
 def not_crawled_yet(request):
     response = {"keyword_list": []}
-    keyword_list = Post.objects.values("keyword").annotate(post_count=Count("post_id")).filter(post_count__lte=1)
+    keyword_list = Post.objects.values("keyword").annotate(post_count=Count("post_id"), first_date=Min("scraped_date")).filter(post_count__lte=1).order_by("first_date")
     for keyword in keyword_list:
         response["keyword_list"].append(keyword["keyword"])
     return Response(response)
