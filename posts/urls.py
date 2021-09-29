@@ -11,4 +11,5 @@ urlpatterns = [
     path('not-crawled-yet', views.not_crawled_yet),
     path('post/<str:keyword>', views.insert_keyword),
     path('all-keywords', views.all_keyword_list),
+    path('all-keywords-alphabet', views.all_keyword_list_alphabetical_order)
 ]

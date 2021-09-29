@@ -130,3 +130,12 @@ def all_keyword_list(request):
     for keyword in keywords:
         response["keyword_list"].append(keyword["keyword"])
     return Response(response)
+
+
+@api_view(['GET'])
+def all_keyword_list_alphabetical_order(request):
+    keywords = Post.objects.values("keyword").distinct()
+    response = {"keyword_list": []}
+    for keyword in keywords:
+        response["keyword_list"].append(keyword["keyword"])
+    return Response(response)
