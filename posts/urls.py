@@ -10,4 +10,5 @@ urlpatterns = [
     path('post/<str:keyword>/<str:post_id>', views.post_postid_keyword_query),
     path('not-crawled-yet', views.not_crawled_yet),
     path('post/<str:keyword>', views.insert_keyword),
+    path('all-keywords', views.all_keyword_list),
 ]

@@ -66,7 +66,7 @@ def post_list_keyword_score_query(request, keyword, food_score):
 
 @api_view(['GET'])
 def keyword_list(request):
-    keywords = Post.objects.values("keyword").annotate(first_date=Min("scraped_date")).order_by("first_date")
+    keywords = Post.objects.values("keyword").annotate(post_count=Count("post_id"), first_date=Min("scraped_date")).filter(post_count__gt=1).order_by("first_date")
     response = {"keyword_list": []}
     for keyword in keywords:
         response["keyword_list"].append(keyword["keyword"])
@@ -121,3 +121,12 @@ def insert_keyword(request, keyword):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+def all_keyword_list(request):
+    keywords = Post.objects.values("keyword").annotate(first_date=Min("scraped_date")).order_by("first_date")
+    response = {"keyword_list": []}
+    for keyword in keywords:
+        response["keyword_list"].append(keyword["keyword"])
+    return Response(response)
