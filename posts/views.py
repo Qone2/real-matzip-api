@@ -93,7 +93,7 @@ def post_postid_keyword_query(request, keyword, post_id):
 
 
 @api_view(['GET'])
-def not_crawled_yet(request):
+def not_scraped_yet(request):
     response = {"keyword_list": []}
     keyword_list = Post.objects.values("keyword").annotate(post_count=Count("post_id"), first_date=Min("scraped_date")).filter(post_count__lte=1).order_by("first_date")
     for keyword in keyword_list:
