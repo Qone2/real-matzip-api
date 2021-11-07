@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from posts.models import Post
 from posts.serializers import PostSerializer
 from django.db.models import Count, Min, Max, Avg
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import generics
 
 
 @api_view(['GET', 'POST'])
@@ -59,9 +61,21 @@ def post_list_keyword_query(request, keyword):
 
 @api_view(['GET'])
 def post_list_keyword_score_query(request, keyword, food_score):
-    posts = Post.objects.filter(keyword=keyword, food_score__gte=float(food_score)).values().order_by("-scraped_date")
+    posts = Post.objects.filter(keyword=keyword, food_score__gte=float(food_score), is_ad=False).values().order_by("-scraped_date")
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
+
+
+class PostListKeywordScoreQuery(generics.ListAPIView):
+    serializer_class = PostSerializer
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        keyword = self.kwargs.get("keyword", None)
+        food_score = self.kwargs.get("food_score", None)
+        queryset = Post.objects.filter(keyword=keyword, food_score__gte=float(food_score), is_ad=False).values().order_by(
+            "-scraped_date")
+        return queryset
 
 
 @api_view(['GET'])
@@ -139,3 +153,9 @@ def all_keyword_list_alphabetical_order(request):
     for keyword in keywords:
         response["keyword_list"].append(keyword["keyword"])
     return Response(response)
+
+
+class AllPostList(generics.ListAPIView):
+    queryset = Post.objects.all().order_by("-scraped_date")
+    serializer_class = PostSerializer
+    pagination_class = PageNumberPagination

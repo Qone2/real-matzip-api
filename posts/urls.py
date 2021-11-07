@@ -11,5 +11,6 @@ urlpatterns = [
     path('not-scraped-yet', views.not_scraped_yet),
     path('post/<str:keyword>', views.insert_keyword),
     path('all-keywords', views.all_keyword_list),
-    path('all-keywords-alphabet', views.all_keyword_list_alphabetical_order)
+    path('all-keywords-alphabet', views.all_keyword_list_alphabetical_order),
+    path('all-posts', views.AllPostList.as_view()),
 ]
