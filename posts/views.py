@@ -60,8 +60,22 @@ def post_list_keyword_query(request, keyword):
 
 
 @api_view(['GET'])
+def post_list_keyword_query_posted_date_order(request, keyword):
+    posts = Post.objects.filter(keyword=keyword).values().order_by("-posted_date")
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def post_list_keyword_score_query(request, keyword, food_score):
     posts = Post.objects.filter(keyword=keyword, food_score__gte=float(food_score), is_ad=False).values().order_by("-scraped_date")
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def post_list_keyword_score_query_posted_date_order(request, keyword, food_score):
+    posts = Post.objects.filter(keyword=keyword, food_score__gte=float(food_score), is_ad=False).values().order_by("-posted_date")
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
 
