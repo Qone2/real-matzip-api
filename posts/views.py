@@ -136,7 +136,7 @@ def insert_keyword(request, keyword):
     data = {
         "post_id": "dummy",
         "post_url": "dummy",
-        "img_url": "https://images.unsplash.com/photo-1604147706283-d7119b5b822c",
+        "img_url": "https://images.unsplash.com/photo-1604147706283-d7119b5b822c?w=640",
         "keyword": keyword,
         "post_text": "dummy",
         "insta_analysis": "dummy",
