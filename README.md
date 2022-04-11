@@ -1,5 +1,6 @@
 # Real Matzip API
-진짜맛집 프로젝트의 메인 api서버
+진짜맛집 프로젝트의 메인 api서버 <br>
+https://www.notion.so/qone2/cb6f8e6e2bed4ff19a8c37556927ed01
 
 ## 1. Install
 ### pip
